@@ -14,7 +14,7 @@ The Oura app shows you today's numbers. This server lets Claude see **weeks of d
 ## Quick start
 
 ```bash
-git clone https://github.com/team-dulkin/oura-mcp.git
+git clone https://github.com/TimDulkin/oura-mcp.git
 cd oura-mcp
 ./install.sh          # creates venv, installs deps, guides token setup
 ```
