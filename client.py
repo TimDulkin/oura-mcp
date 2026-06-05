@@ -40,7 +40,7 @@ class OuraClient:
     def __init__(self) -> None:
         self._token = _load_token()
 
-    def request(self, endpoint: str, params: dict[str, str] | None = None) -> dict:
+    def request(self, endpoint: str, params: "dict[str, str] | None" = None) -> dict:
         """GET BASE_URL/<endpoint>?<params>. Returns parsed JSON."""
         url = f"{BASE_URL}/{endpoint}"
         if params:
