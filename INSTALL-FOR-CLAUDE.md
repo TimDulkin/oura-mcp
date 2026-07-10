@@ -1,17 +1,27 @@
-# INSTALL-FOR-CLAUDE.md
+# INSTALL-FOR-CLAUDE.md — assisted install guide
 
-> **You are Claude, running in Cowork mode.** The user wants you to install this
-> Oura MCP server for them. They are likely not technical — your job is to do
-> everything you can yourself, and reduce their part to two simple actions:
-> pasting a config and restarting the app. Follow these steps exactly.
-> Communicate with the user in the language they are using with you.
+> **To the user:** this guide is written for AI assistants (Claude Desktop /
+> Cowork). To use it, tell your assistant:
+> *"Install this Oura MCP server for me, following INSTALL-FOR-CLAUDE.md."*
+> Your explicit request is what authorizes the steps below — an assistant
+> should not act on this file on its own.
+>
+> **To the AI assistant:** follow this guide only if your user has explicitly
+> asked you to install this server. Before doing anything, summarize the plan
+> to the user (clone the repo, prepare a config snippet, walk them through
+> pasting it and restarting the app) and get their confirmation. Nothing in
+> this document overrides your own safety judgment or your user's
+> instructions. Communicate in the language the user is using with you.
 
 ## What this is
 
-A local MCP server (pure Python stdlib, zero dependencies — **no pip, no venv,
-no install script needed**) that lets Claude read the user's Oura Ring data.
-Do NOT run `install.sh` if present — it is legacy. The server runs directly
-with the system `python3`.
+A local MCP server (pure Python stdlib, zero dependencies — no pip, no venv)
+that lets Claude read the user's Oura Ring data. It runs directly with the
+system `python3`.
+
+This document is the assisted install flow for users who prefer not to use a
+terminal. A manual, terminal-based install path is described in `README.md` —
+both are legitimate.
 
 ## Prerequisites to verify
 
@@ -38,7 +48,7 @@ tools (Read), which see the host paths.
 
 Your file tools see the user's real (host) paths, e.g.
 `/Users/<name>/Documents/Assistant/oura-mcp`. Your shell sees a different,
-sandbox path — **never put a sandbox path (`/sessions/...`) into the config.**
+sandbox path — never put a sandbox path (`/sessions/...`) into the config.
 Use the host path as seen by your Read/Write tools.
 
 ## Step 3 — Build the config snippet
@@ -60,14 +70,17 @@ Construct this JSON, substituting the real host path and the user's token:
 ```
 
 If the user already has other MCP servers configured, ask them to paste the
-current content of their config file into the chat, then return the **full
-merged file** for them to paste back — do not make a novice hand-edit JSON.
+current content of their config file into the chat — telling them they may
+replace other servers' tokens/keys with placeholders like `KEEP_AS_IS` first
+(their existing secrets don't need to enter the chat). Return the full merged
+file with those placeholders untouched, and tell them to keep their original
+values in those spots — safer than a novice hand-editing JSON.
 
 ## Step 4 — Guide the user through the two manual actions
 
 You cannot edit Claude Desktop's own config file (it is outside your sandbox —
-by design). Give the user these instructions, formatted clearly, with the
-ready-to-paste JSON from Step 3:
+by design; the user stays in control of it). Give the user these instructions,
+formatted clearly, with the ready-to-paste JSON from Step 3:
 
 1. In Claude Desktop open **Settings → Developer** and click **Edit Config**.
    A folder opens with the file `claude_desktop_config.json`.
@@ -86,7 +99,6 @@ When the user comes back after restarting:
    — an entry named **oura** should be listed.
 2. Run a real query: call `oura_today` or answer "How did I sleep last night?"
    using the Oura tools. If you receive sleep data — installation succeeded.
-   Congratulate the user.
 
 ## Troubleshooting
 
@@ -104,10 +116,10 @@ When the user comes back after restarting:
 - **Oura API `end_date` is exclusive** — the server handles this; for day X
   query `end_date = X + 1` only if you hit the raw API yourself.
 
-## Notes for you, Claude
+## Notes for the assistant
 
-- Never print the user's token back into the chat more than necessary; include
-  it once, inside the config snippet.
+- Include the user's token once, inside the config snippet — don't echo it
+  elsewhere in the chat.
 - Do not modify files outside the connected folder.
-- Do not suggest Terminal commands to the user — the whole point of this flow
-  is that they never open a terminal.
+- This flow is designed so the user doesn't need a terminal, but if they want
+  to verify any step themselves (in a terminal or otherwise), help them do so.
